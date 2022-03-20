@@ -3,6 +3,6 @@
          clj-test-containers/clj-test-containers {:mvn/version "0.6.0-SNAPSHOT"}}
 
  :aliases
- {:dev  {}
+ {:dev  {:extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
   :test {:extra-paths ["test"]
          :extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}}}

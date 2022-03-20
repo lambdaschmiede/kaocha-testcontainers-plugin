@@ -13,4 +13,10 @@
                               :for    :each
                               :config {:image-name    "postgres:12.1"
                                        :exposed-ports [5432]
+                                       :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+
+                             {:id     :postgres-3
+                              :for    :ns
+                              :config {:image-name    "postgres:12.1"
+                                       :exposed-ports [5432]
                                        :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}]}
