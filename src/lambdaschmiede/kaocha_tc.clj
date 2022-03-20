@@ -15,7 +15,7 @@
 (defn- containers-for
   "Convenience function to access containers in the config"
   [type config]
-  (filter (fn [{:keys [for]}] (= type for)) config))
+  (filter (fn [{:keys [for]}] (= type (:type for))) config))
 
 (defn- start-containers
   "Starts all containers found in the configuration according to their type.
@@ -28,18 +28,19 @@
 (p/defplugin lambdaschmiede.kaocha-tc/plugin
 
              ;; Wraps the run function, sets up containers before and tears them down afterwards again
-             (wrap-run [run {:keys [kaocha-testcontainers]}]
-                       (fn [test test-plan]
-                         (let [containers (case (:kaocha.testable/type test)
-                                            :kaocha.type/var (start-containers :each kaocha-testcontainers)
-                                            :kaocha.type/ns (start-containers :ns kaocha-testcontainers)
-                                            :kaocha.type/clojure.test (start-containers :all kaocha-testcontainers)
-                                            {})]
-                           (binding [containers-for-scope (merge containers-for-scope containers)]
-                             (let [result (run test test-plan)]
-                               (doall (map (fn [[_ container]]
-                                             (tc/stop! container)) containers))
-                               result))))))
+             (wrap-run [run config]
+                       (let [kaocha-testcontainers (:lambdaschmiede.kaocha-tc/config config)]
+                         (fn [test test-plan]
+                           (let [containers (case (:kaocha.testable/type test)
+                                              :kaocha.type/var (start-containers :each kaocha-testcontainers)
+                                              :kaocha.type/ns (start-containers :ns kaocha-testcontainers)
+                                              :kaocha.type/clojure.test (start-containers :all kaocha-testcontainers)
+                                              {})]
+                             (binding [containers-for-scope (merge containers-for-scope containers)]
+                               (let [result (run test test-plan)]
+                                 (doall (map (fn [[_ container]]
+                                               (tc/stop! container)) containers))
+                                 result)))))))
 
 
 (comment

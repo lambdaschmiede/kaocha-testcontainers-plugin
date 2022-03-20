@@ -40,3 +40,12 @@
       (is (some? pg-container))
       (is (some? (.getHost ^GenericContainer (:container pg-container))))
       (is (some? (.getMappedPort (:container pg-container) 5432))))))
+
+(deftest for-ns-test
+
+  (testing "The 'for namespace' container exists"
+    (let [pg-container (get-container :postgres-3)]
+      (is (some? pg-container))
+      (is (some? (:host pg-container)))
+      (is (some? (.getMappedPort (:container pg-container) 5432)))))
+  )
