@@ -1,0 +1,16 @@
+#kaocha/v1
+    {:tests                 [{:test-paths  ["test"]
+                              :ns-patterns [".*test"]}]
+     :kaocha/plugins        [:lambdaschmiede.kaocha-tc/plugin]
+     :kaocha-testcontainers [
+                             {:id          :postgres-1
+                              :for         :all
+                              :config      {:image-name    "postgres:12.1"
+                                            :exposed-ports [5432]
+                                            :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+
+                             {:id     :postgres-2
+                              :for    :each
+                              :config {:image-name    "postgres:12.1"
+                                       :exposed-ports [5432]
+                                       :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}]}
