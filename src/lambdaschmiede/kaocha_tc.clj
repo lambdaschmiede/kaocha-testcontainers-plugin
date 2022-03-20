@@ -24,7 +24,6 @@
   (into {}
         (for [{:keys [id config]} (containers-for type kaocha-testcontainers)]
           [id (tc/start! (tc/create config))])))
-
 (p/defplugin lambdaschmiede.kaocha-tc/plugin
 
              ;; Wraps the run function, sets up containers before and tears them down afterwards again
