@@ -31,38 +31,59 @@ the [`create` function of clj-test-containers](https://github.com/javahippie/clj
 
 ```clojure
 #kaocha/v1
-    {:tests                 [{:test-paths  ["test"]
-                              :ns-patterns [".*test"]}]
-     :kaocha/plugins        [:lambdaschmiede.kaocha-tc/plugin]
-     :kaocha-testcontainers [
-                             {:id     :postgres-1
-                              :for    :all
-                              :config {:image-name    "postgres:12.1"
-                                       :exposed-ports [5432]
-                                       :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+    {:tests                           [{:id          :unit
+                                        :test-paths  ["test"]
+                                        :ns-patterns [".*test$"]
+                                        :fail-fast?  true}
 
-                             {:id     :postgres-2
-                              :for    :each
-                              :config {:image-name    "postgres:12.1"
-                                       :exposed-ports [5432]
-                                       :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}]}
+                                       {:id          :no-tc
+                                        :test-paths  ["test"]
+                                        :ns-patterns [".*no-tc$"]}]
+
+     :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin]
+     :lambdaschmiede.kaocha-tc/config [
+                                       {:id     :postgres-1
+                                        :for    {:type   :all
+                                                 :filter [:unit]}
+                                        :config {:image-name    "postgres:12.1"
+                                                 :exposed-ports [5432]
+                                                 :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+
+                                       {:id     :postgres-2
+                                        :for    {:type   :each
+                                                 :filter ["-test$"]}
+                                        :config {:image-name    "postgres:12.1"
+                                                 :exposed-ports [5432]
+                                                 :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+
+                                       {:id     :postgres-3
+                                        :for    {:type   :ns
+                                                 :filter ["test$"]}
+                                        :config {:image-name    "postgres:12.1"
+                                                 :exposed-ports [5432]
+                                                 :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}]}
 ```
+
+Note, that we can assign different scopes to the containers via `:for`: `:postgres-1` will start before a whole test run
+and be discarded afterwards, marked by the `:all` type. The `:filter` vector accepts a list of test-ids for which this
+should be run. In this case, the container would be started before the `:unit` tests, but not before the `:no-tc`
+tests. `postgres` will be started for every single test which name ends in `-test`, `:postgres-3` will be started for 
+every test namespace which name ends on `test`. 
 
 If we now want to access the container and its configuration from within the tests, we can do so with the
 function `lambdaschmiede.kaocha-tc/get-container`. This function is scoped, so it will only return containers which are
-valid for the active test: 
+valid for the active test:
 
 ```clojure
 (require [clojure.test :refer :all])
-(require [lambdaschmiede.kaocha-tc/get-container :refer [get-container
-                                                         ]])
+(require [lambdaschmiede.kaocha-tc/get-container :refer [get-container]])
 (deftest for-each-test
 
-  (testing "The 'for each' container exists"
-    (let [pg-container (get-container :postgres-2)]
-      (is (some? pg-container))
-      (is (some? (.getHost ^GenericContainer (:container pg-container))))
-      (is (some? (.getMappedPort (:container pg-container) 5432))))))
+         (testing "The 'for each' container exists"
+                  (let [pg-container (get-container :postgres-2)]
+                    (is (some? pg-container))
+                    (is (some? (.getHost ^GenericContainer (:container pg-container))))
+                    (is (some? (.getMappedPort (:container pg-container) 5432))))))
 ```
 
 ## License
