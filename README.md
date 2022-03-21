@@ -1,5 +1,7 @@
 # Kaocha Testcontainers Plugin
 
+[![Clojars Project](https://img.shields.io/clojars/v/com.lambdaschmiede/kaocha-testcontainers-plugin.svg)](https://clojars.org/com.lambdaschmiede/kaocha-testcontainers-plugin)
+
 ## What does it do?
 
 This is a plugin for the [kaocha](https://github.com/lambdaisland/kaocha) testrunner. It manages the lifecylce
@@ -81,7 +83,7 @@ valid for the active test:
          (testing "The 'for each' container exists"
                   (let [pg-container (get-container :postgres-2)]
                     (is (some? pg-container))
-                    (is (some? (.getHost ^GenericContainer (:container pg-container))))
+                    (is (some? (.getHost (:container pg-container))))
                     (is (some? (.getMappedPort (:container pg-container) 5432))))))
 ```
 

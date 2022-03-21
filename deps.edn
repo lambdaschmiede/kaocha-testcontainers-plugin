@@ -3,6 +3,13 @@
          clj-test-containers/clj-test-containers {:mvn/version "0.6.0-SNAPSHOT"}}
 
  :aliases
- {:dev  {:extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
-  :test {:extra-paths ["test"]
-         :extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}}}
+ {:dev    {:extra-deps {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
+  :test   {:extra-paths ["test"]
+           :extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
+  :build  {:deps       {io.github.clojure/tools.build {:tag "v0.8.1" :sha "7d40500"}}
+           :ns-default build}
+  :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "0.2.0"}}
+           :exec-fn    deps-deploy.deps-deploy/deploy
+           :exec-args  {:installer      :remote
+                        :sign-releases? true
+                        :artifact       "target/kaocha-testcontainers-plugin-0.0.9.jar"}}}}
