@@ -3,7 +3,7 @@
             [lambdaschmiede.kaocha-tc :refer [get-container]])
   (:import [org.testcontainers.containers GenericContainer]))
 
-(deftest for-each-test-2
+(deftest for-each-2-test
 
   (testing "The 'for each' container exists"
     (let [pg-container (get-container :postgres-2)]
@@ -11,7 +11,7 @@
       (is (some? (.getHost ^GenericContainer (:container pg-container))))
       (is (some? (.getMappedPort (:container pg-container) 5432))))))
 
-(deftest other-for-each-test-2
+(deftest other-for-each-2-test
 
   (testing "The 'for each' container exists"
     (let [pg-container (get-container :postgres-2)]
@@ -19,7 +19,7 @@
       (is (some? (.getHost ^GenericContainer (:container pg-container))))
       (is (some? (.getMappedPort (:container pg-container) 5432))))))
 
-(deftest another-for-each-test-2
+(deftest another-for-each-2-test
 
   (testing "The 'for each' container exists"
     (let [pg-container (get-container :postgres-2)]
@@ -27,7 +27,7 @@
       (is (some? (.getHost ^GenericContainer (:container pg-container))))
       (is (some? (.getMappedPort (:container pg-container) 5432))))))
 
-(deftest for-all-test-2
+(deftest for-all-2-test
 
   (testing "The 'for all' container exists"
     (let [pg-container (get-container :postgres-1)]

@@ -1,26 +1,32 @@
 #kaocha/v1
-    {:tests                           [{:test-paths                       ["test"]
-                                        :ns-patterns                      [".*test"]
-                                        :lambdaschmiede.koacha-tc/enable? true}]
+    {:tests                           [{:id          :unit
+                                        :test-paths  ["test"]
+                                        :ns-patterns [".*test$"]
+                                        :fail-fast?   true}
+
+                                       {:id          :no-tc
+                                        :test-paths  ["test"]
+                                        :ns-patterns [".*no-tc$"]}]
 
      :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin]
      :lambdaschmiede.kaocha-tc/config [
                                        {:id     :postgres-1
-                                        :for    {:type :all}
-                                        :config {:image-name    "postgres:12.1"
-                                                 :exposed-ports [5432]
-                                                 :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+                                          :for    {:type :all
+                                                   :filter [:unit]}
+                                          :config {:image-name    "postgres:12.1"
+                                                   :exposed-ports [5432]
+                                                   :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
 
                                        {:id     :postgres-2
                                         :for    {:type   :each
-                                                 :filter [".*-test"]}
+                                                 :filter ["-test$"]}
                                         :config {:image-name    "postgres:12.1"
                                                  :exposed-ports [5432]
                                                  :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
 
                                        {:id     :postgres-3
                                         :for    {:type   :ns
-                                                 :filter [".*integration-test"]}
+                                                 :filter ["test$"]}
                                         :config {:image-name    "postgres:12.1"
                                                  :exposed-ports [5432]
                                                  :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}]}
