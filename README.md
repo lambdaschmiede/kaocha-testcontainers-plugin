@@ -33,8 +33,7 @@ the [`create` function of clj-test-containers](https://github.com/javahippie/clj
 #kaocha/v1
     {:tests                           [{:id          :unit
                                         :test-paths  ["test"]
-                                        :ns-patterns [".*test$"]
-                                        :fail-fast?  true}
+                                        :ns-patterns [".*test$"]}
 
                                        {:id          :no-tc
                                         :test-paths  ["test"]
@@ -43,8 +42,8 @@ the [`create` function of clj-test-containers](https://github.com/javahippie/clj
      :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin]
      :lambdaschmiede.kaocha-tc/config [
                                        {:id     :postgres-1
-                                        :for    {:type   :all
-                                                 :filter [:unit]}
+                                        :for    {:type  :all
+                                                 :tests [:unit]}
                                         :config {:image-name    "postgres:12.1"
                                                  :exposed-ports [5432]
                                                  :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
@@ -67,8 +66,8 @@ the [`create` function of clj-test-containers](https://github.com/javahippie/clj
 Note, that we can assign different scopes to the containers via `:for`: `:postgres-1` will start before a whole test run
 and be discarded afterwards, marked by the `:all` type. The `:filter` vector accepts a list of test-ids for which this
 should be run. In this case, the container would be started before the `:unit` tests, but not before the `:no-tc`
-tests. `postgres` will be started for every single test which name ends in `-test`, `:postgres-3` will be started for 
-every test namespace which name ends on `test`. 
+tests. `postgres` will be started for every single test which name ends in `-test`, `:postgres-3` will be started for
+every test namespace which name ends on `test`.
 
 If we now want to access the container and its configuration from within the tests, we can do so with the
 function `lambdaschmiede.kaocha-tc/get-container`. This function is scoped, so it will only return containers which are

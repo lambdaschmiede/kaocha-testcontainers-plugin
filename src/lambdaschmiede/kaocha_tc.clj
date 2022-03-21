@@ -44,7 +44,7 @@
   (into {}
         (->> configuration
              (filter #(= :all (get-in % [:for :type])))
-             (filter #(some #{(:kaocha.testable/id testable)} (get-in % [:for :filter])))
+             (filter #(some #{(:kaocha.testable/id testable)} (get-in % [:for :tests])))
              (map (fn [{:keys [id config]}] [id (tc/start! (tc/create config))])))))
 
 (p/defplugin lambdaschmiede.kaocha-tc/plugin

@@ -1,8 +1,7 @@
 #kaocha/v1
     {:tests                           [{:id          :unit
                                         :test-paths  ["test"]
-                                        :ns-patterns [".*test$"]
-                                        :fail-fast?   true}
+                                        :ns-patterns [".*test$"]}
 
                                        {:id          :no-tc
                                         :test-paths  ["test"]
@@ -11,11 +10,11 @@
      :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin]
      :lambdaschmiede.kaocha-tc/config [
                                        {:id     :postgres-1
-                                          :for    {:type :all
-                                                   :filter [:unit]}
-                                          :config {:image-name    "postgres:12.1"
-                                                   :exposed-ports [5432]
-                                                   :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
+                                        :for    {:type   :all
+                                                 :tests [:unit]}
+                                        :config {:image-name    "postgres:12.1"
+                                                 :exposed-ports [5432]
+                                                 :env-vars      {"POSTGRES_PASSWORD" "verysecret"}}}
 
                                        {:id     :postgres-2
                                         :for    {:type   :each
