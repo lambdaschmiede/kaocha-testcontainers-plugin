@@ -5,7 +5,9 @@
  :aliases
  {:dev    {:extra-deps {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
   :test   {:extra-paths ["test"]
-           :extra-deps  {com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}}}
+           :extra-deps  {com.fzakaria/slf4j-timbre     {:mvn/version "0.3.21"}
+                         lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}
+                         lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}}}
   :build  {:deps       {io.github.clojure/tools.build {:tag "v0.8.1" :sha "7d40500"}}
            :ns-default build}
   :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "0.2.0"}}
