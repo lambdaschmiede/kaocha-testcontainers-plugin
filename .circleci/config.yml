@@ -7,7 +7,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install leiningen
-      - run: lein-cache-{{ checksum "project.clj" }}
+      - restore_cache:
+          key: lein-cache-{{ checksum "project.clj" }}
       - run: ./bin/kaocha.sh
       - store_test_results:
           path: target/junit.xml
