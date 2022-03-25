@@ -7,7 +7,11 @@
                                         :test-paths  ["test"]
                                         :ns-patterns [".*no-tc$"]}]
 
-     :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin]
+     :kaocha/plugins                  [:lambdaschmiede.kaocha-tc/plugin
+                                       :kaocha.plugin/junit-xml
+                                       :kaocha.plugin/cloverage]
+     :reporter [kaocha.report/documentation]
+     :kaocha.plugin.junit-xml/target-file "target/junit.xml"
      :lambdaschmiede.kaocha-tc/config [
                                        {:id     :postgres-1
                                         :for    {:type   :all
