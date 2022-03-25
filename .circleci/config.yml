@@ -6,7 +6,10 @@ jobs:
       image: ubuntu-2004:202107-02 # Not a Docker Image, because of Testcontainers
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install leiningen && sudo apt-get install clojure
+      - run: sudo apt-get update && sudo apt-get install leiningen
+      - run: curl -O https://download.clojure.org/install/linux-install-1.10.3.1087.sh
+      - run: chmod +x linux-install-1.10.3.1087.sh
+      - run: sudo ./linux-install-1.10.3.1087.sh
       - run: ./bin/kaocha.sh
       - store_test_results:
           path: target/junit.xml
