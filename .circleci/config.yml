@@ -1,22 +1,23 @@
 version: 2.1
 
-test:
-  machine:
-    image: ubuntu-2004:202107-02 # Not a Docker Image, because of Testcontainers
-  steps:
-    - checkout
-    - buildevents/with_job_span:
-        steps:
-          - buildevents/berun:
-              bename: install-lein
-              becommand: sudo apt-get update && sudo apt-get install leiningen
-          - restore_cache:
-              key: lein-cache-{{ checksum "project.clj" }}
-          - buildevents/berun:
-              bename: lein-test
-              becommand: ./bin/kaocha.sh
-          - store_test_results:
-              path: target/junit.xml
+jobs:
+  test:
+    machine:
+      image: ubuntu-2004:202107-02 # Not a Docker Image, because of Testcontainers
+    steps:
+      - checkout
+      - buildevents/with_job_span:
+          steps:
+            - buildevents/berun:
+                bename: install-lein
+                becommand: sudo apt-get update && sudo apt-get install leiningen
+            - restore_cache:
+                key: lein-cache-{{ checksum "project.clj" }}
+            - buildevents/berun:
+                bename: lein-test
+                becommand: ./bin/kaocha.sh
+            - store_test_results:
+                path: target/junit.xml
 
 workflows:
   test:
